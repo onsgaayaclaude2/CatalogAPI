@@ -6,4 +6,4 @@
 **/*.user
 **/*.suo
 appsettings.Development.json
-.env ~
+.env
