@@ -64,6 +64,6 @@ public class ProductUnitTests : IClassFixture<WebApplicationFactory<Program>>
         var products = await response.Content.ReadFromJsonAsync<List<Product>>();
         Assert.NotNull(products);
         Assert.NotEmpty(products);
-        Assert.Contains(products, p => p.Name == "Ecran 27 pouces");
+        Assert.Contains(products, p => p.Name == "Souris sans fil");
     }
 }
