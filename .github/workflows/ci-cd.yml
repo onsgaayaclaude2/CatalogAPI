@@ -39,6 +39,15 @@ jobs:
         --filter "FullyQualifiedName~ProductUnitTests"
         --configuration Release
         --logger "console;verbosity=detailed"
+        --logger "trx;LogFileName=UnitResults.trx"
+        --results-directory ./TestResults/UnitTests
+
+    - name: Upload Unit Tests Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: unit-test-results
+        path: ./TestResults/UnitTests/*.trx
 
   # ==========================================================
   # JOB 2 : Tests d'Intégration avec Service SQL Server
@@ -85,3 +94,12 @@ jobs:
         dotnet test tests/ProductCatalog.Tests/ProductCatalog.Tests.csproj
         --configuration Release
         --logger "console;verbosity=detailed"
+        --logger "trx;LogFileName=IntegrationResults.trx"
+        --results-directory ./TestResults/IntegrationTests
+
+    - name: Upload Integration Tests TRX
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: integration-test-results
+        path: ./TestResults/IntegrationTests/*.trx
