@@ -15,12 +15,13 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 // Auto-création de la base de données au démarrage
-using (var scope = app.Services.CreateScope())
+if (!app.Environment.IsEnvironment("Testing"))
 {
-var db =
-scope.ServiceProvider.GetRequiredService<AppDbContext>();
-// Attend que la base soit disponible et crée le schéma
-db.Database.EnsureCreated();
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        db.Database.EnsureCreated();
+    }
 }
 // 1. Endpoint d'observabilité / Healthcheck applicatif (Measurement- CALMS)
 app.MapGet("/health", () => Results.Ok(new { status = "Healthy",
@@ -72,3 +73,5 @@ app.MapDelete("/api/products/{id:int}", async (int id, AppDbContext db) =>
 
 
 app.Run();
+
+public partial class Program { }
