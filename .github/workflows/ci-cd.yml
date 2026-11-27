@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
 jobs:
   # ====================================================================
   # JOB 1 : Continuous Integration (Build & Unit Tests)
@@ -48,6 +53,14 @@ jobs:
       with:
         name: unit-test-results
         path: ./TestResults/UnitTests/*.trx
+
+    - name: Publish Test Summary
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: 'Report - Tests'
+        path: './TestResults/**/*.trx'
+        reporter: 'dotnet-trx'
 
   # ==========================================================
   # JOB 2 : Tests d'Intégration avec Service SQL Server
@@ -103,3 +116,11 @@ jobs:
       with:
         name: integration-test-results
         path: ./TestResults/IntegrationTests/*.trx
+
+    - name: Publish Test Summary
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: 'Report - Tests'
+        path: './TestResults/**/*.trx'
+        reporter: 'dotnet-trx'
